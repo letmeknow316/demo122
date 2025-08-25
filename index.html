@@ -213,6 +213,17 @@
 }
 </style>
 
+
+<style>
+.card { border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); border-radius: 12px; overflow: hidden; }
+.card .img { height: 120px; background: radial-gradient(60% 60% at 50% 30%, rgba(56,189,248,0.25), rgba(255,255,255,0.02)); display:flex; align-items:center; justify-content:center; }
+.card .img span { font-size: 12px; color:#cbd5e1; }
+.card .body { padding: 10px; }
+.price { display:flex; justify-content:space-between; font-size:12px; color:#9ca3af; }
+.price strong { color:#fff; }
+.tag { font-size:10px; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); padding:3px 6px; border-radius:999px; }
+</style>
+
 </head>
 <body class="flex flex-col">
     <!-- Top Navigation Bar -->
@@ -363,47 +374,48 @@
         </div>
     
 </main>
-    <main id="marketTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
-        <div class="text-center mb-4">
-            <h2 class="text-2xl font-medium text-gray-300">Marketplace</h2>
-            <p class="text-gray-400 text-sm mt-1">Trading is on the way.</p>
-        </div>
-        <div class="relative mb-6 rounded-2xl overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-emerald-400/20 blur-xl"></div>
-            <div class="relative bg-[#13161c] border border-white/10 rounded-2xl p-6 flex flex-col items-center">
-                <div class="w-24 h-24 rounded-xl bg-white/5 flex items-center justify-center mb-4 shadow-inner">
-                    <i class="fas fa-store text-4xl opacity-80"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-1">Soon</h3>
-                <p class="text-gray-400 text-sm">We’re ing a sleek market for gifts and swaps.</p>
-            </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-xl border border-white/10 p-4 bg-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium">Featured Drops</p>
-                        <p class="text-xs text-gray-400">Curated weekly</p>
-                    </div>
-                </div>
-            </div>
-            <div class="rounded-xl border border-white/10 p-4 bg-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium">Verified Sellers</p>
-                        <p class="text-xs text-gray-400">Safety-first</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     
-</main>
+    <main id="marketTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px]">
+      <!-- Market Header -->
+      <div class="mb-3">
+        <div class="grid grid-cols-3 gap-2">
+          <button id="mkBuy" class="btn-press rounded-xl py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 font-medium">Buy</button>
+          <button id="mkSell" class="btn-press rounded-xl py-2 bg-white/5 border border-white/10">Sell</button>
+          <button id="mkSwap" class="btn-press rounded-xl py-2 bg-white/5 border border-white/10">Swap</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="rounded-xl border border-white/10 bg-white/5 p-3 mb-3">
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <div class="text-xs text-gray-400 mb-1">Price (Stars)</div>
+            <input id="fPrice" type="number" placeholder="max..." class="w-full input-tall" />
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 mb-1">Number</div>
+            <input id="fNumber" type="number" placeholder="#..." class="w-full input-tall" />
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 mb-1">Model</div>
+            <select id="fModel" class="w-full bg-transparent border border-white/10 rounded-lg py-2 px-2">
+              <option value="">All</option>
+              <option>Rocket</option>
+              <option>Diamond</option>
+              <option>Gold Cup</option>
+              <option>Lucky Cat</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div id="marketGrid" class="grid grid-cols-2 gap-3 pb-2"></div>
+      <div class="text-center mt-2">
+        <button id="mkLoadMore" class="btn-press rounded-xl py-2 px-4 bg-white/5 border border-white/10">Show more</button>
+      </div>
+    </main>
+    
 
     <main id="profileTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
         <div class="flex flex-col items-center mb-6">
@@ -472,7 +484,7 @@
         </div>
         <div>
           <p class="text-sm font-medium">Мои активы</p>
-          <p class="text-xs text-gray-400">Все доступные монеты и Звезды</p>
+          <p class="text-xs text-gray-400">All доступные монеты и Звезды</p>
         </div>
       </div>
       <i class="fas fa-chevron-right text-gray-500"></i>
@@ -674,7 +686,11 @@ function openSheet(kind){
     hookSwapLogicFull();
   } else if (kind === 'deposit'){
     const saved = localStorage.getItem('deposit_token') || 'STARS';
-    content.innerHTML = `<h3 class="text-lg font-semibold mb-2">Deposit</h3><div id="depTokens" class="flex flex-wrap gap-2 mb-4"></div><div id="depActions"></div>`;
+    content.innerHTML = `<h3 class="text-lg font-semibold mb-2">Deposit</h3><div id="depTokens" class="flex flex-wrap gap-2 mb-4"></div>
+      <div class=\"rounded-xl border border-white/10 p-3 bg-white/5 mb-4\">
+        <div class=\"text-xs text-gray-400 mb-1\">Amount</div>
+        <input id=\"depAmount\" type=\"number\" placeholder=\"0.00\" class=\"w-full input-tall\" />
+      </div><div id="depActions"></div>`;
     renderTokenChips('depTokens', ['STARS','TON','SOL','BNB','USDT','USDC'], saved, false);
     hookDepositLogic(saved);
   }
@@ -1195,6 +1211,279 @@ function openMyAssets(){
 document.addEventListener('DOMContentLoaded', function(){
   var myAssetsBtn = document.getElementById('btnMyAssets');
   if (myAssetsBtn) myAssetsBtn.addEventListener('click', function(){ openMyAssets(); });
+});
+</script>
+
+
+<script>
+// --- Demo dataset for market (replace with API later) ---
+const MODELS = ['Rocket','Diamond','Gold Cup','Lucky Cat'];
+const demoMarket = Array.from({length: 20}).map((_,i)=>{
+  const m = MODELS[i % MODELS.length];
+  const stars = Math.floor(500 + Math.random()*5000);
+  const usd = (stars * 0.018).toFixed(2);
+  const num = 1000 + i;
+  return { id: 'lot'+i, model: m, number: num, stars: stars, usd: usd, img: null, title: m + ' #' + num };
+});
+
+let mkPage = 1;
+const mkPerPage = 8;
+
+function renderMarket(reset){
+  const grid = document.getElementById('marketGrid');
+  if (reset) { grid.innerHTML = ''; mkPage = 1; }
+  const filters = {
+    price: parseFloat(document.getElementById('fPrice').value || '0'),
+    number: parseInt(document.getElementById('fNumber').value || '0'),
+    model: document.getElementById('fModel').value || ''
+  };
+  const filtered = demoMarket.filter(item=>{
+    if (filters.price && item.stars > filters.price) return false;
+    if (filters.number && item.number !== filters.number) return false;
+    if (filters.model && item.model !== filters.model) return false;
+    return true;
+  });
+  const slice = filtered.slice(0, mkPage*mkPerPage);
+  grid.innerHTML = slice.map(item => cardHTML(item)).join('');
+  document.getElementById('mkLoadMore').style.display = (slice.length < filtered.length) ? 'inline-block' : 'none';
+}
+
+function cardHTML(item){
+  return `
+    <div class="card" data-id="${item.id}">
+      <div class="img"><span>${item.model} • #${item.number}</span></div>
+      <div class="body">
+        <div class="flex items-center justify-between mb-1">
+          <div class="text-sm font-medium">${item.title}</div>
+          <span class="tag">User</span>
+        </div>
+        <div class="price">
+          <div>Stars: <strong>${item.stars}</strong></div>
+          <div>USD: <strong>$${item.usd}</strong></div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <button class="btn-press rounded-lg py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700" data-buy="${item.id}">Buy</button>
+          <button class="btn-press rounded-lg py-2 bg-white/5 border border-white/10" data-info="${item.id}">More Info</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+// --- Your inventory for swap (demo) ---
+const MY_INV = [
+  { id:'mine1', model:'Rocket', number:2001, stars:1200, usd:(1200*0.018).toFixed(2), title:'Rocket #2001' },
+  { id:'mine2', model:'Diamond', number:2002, stars:3200, usd:(3200*0.018).toFixed(2), title:'Diamond #2002' },
+  { id:'mine3', model:'Gold Cup', number:2003, stars:600, usd:(600*0.018).toFixed(2), title:'Gold Cup #2003' },
+  { id:'mine4', model:'Lucky Cat', number:2004, stars:2100, usd:(2100*0.018).toFixed(2), title:'Lucky Cat #2004' },
+];
+
+function openMoreInfo(item){
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">${item.title}</h3>
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3 mb-3">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Model</div>
+          <div class="text-sm">${item.model}</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Number</div>
+          <div class="text-sm">#${item.number}</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+        <div class="text-xs text-gray-400 mb-1">Price (Stars)</div>
+        <div class="text-base">${item.stars}</div>
+      </div>
+      <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+        <div class="text-xs text-gray-400 mb-1">Price (USD)</div>
+        <div class="text-base">$${item.usd}</div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3 mb-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Seller</div>
+          <div class="text-sm">User #${(10000+item.number)}</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Created</div>
+          <div class="text-sm">just now</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <button class="btn-press rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Buy</button>
+      <button class="btn-press rounded-xl py-3 px-4 bg-white/5 border border-white/10" onclick="closeSheet()">Close</button>
+    </div>
+  `;
+  overlay.classList.add('active'); sheet.classList.add('active');
+}
+
+function openGiftSwap(){
+  // Step 1: choose your gift
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Gift swap</h3>
+    <div class="text-xs text-gray-400 mb-2">1) Choose your gift</div>
+    <div id="mineGrid" class="grid grid-cols-2 gap-2 mb-4"></div>
+    <div id="step2" class="hidden">
+      <div class="text-xs text-gray-400 mb-2">2) Choose a gift with similar price</div>
+      <div id="targetGrid" class="grid grid-cols-2 gap-2"></div>
+      <button id="btnRequestSwap" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 mt-3">Send swap request</button>
+    </div>
+  `;
+  overlay.classList.add('active'); sheet.classList.add('active');
+
+  const mineGrid = document.getElementById('mineGrid');
+  mineGrid.innerHTML = MY_INV.map(a=>`
+    <div class="card" data-mine="${a.id}">
+      <div class="img"><span>${a.model} • #${a.number}</span></div>
+      <div class="body">
+        <div class="text-sm font-medium">${a.title}</div>
+        <div class="price"><div>Stars: <strong>${a.stars}</strong></div><div>USD: <strong>$${a.usd}</strong></div></div>
+        <button class="btn-press w-full mt-2 rounded-lg py-2 bg-white/5 border border-white/10">Выбрать</button>
+      </div>
+    </div>
+  `).join('');
+
+  let chosenMine = null;
+  mineGrid.querySelectorAll('[data-mine]').forEach(card=>{
+    card.querySelector('button').addEventListener('click', ()=>{
+      chosenMine = MY_INV.find(x=>x.id===card.getAttribute('data-mine'));
+      // highlight selection
+      mineGrid.querySelectorAll('.card').forEach(c=>c.style.outline='none');
+      card.style.outline = '2px solid rgba(56,189,248,.6)';
+      // show step 2
+      document.getElementById('step2').classList.remove('hidden');
+      // render target candidates within ±15% by Stars
+      const min = chosenMine.stars * 0.85, max = chosenMine.stars * 1.15;
+      const candidates = demoMarket.filter(x=>x.stars>=min && x.stars<=max);
+      const targetGrid = document.getElementById('targetGrid');
+      targetGrid.innerHTML = candidates.map(b=>`
+        <div class="card" data-target="${b.id}">
+          <div class="img"><span>${b.model} • #${b.number}</span></div>
+          <div class="body">
+            <div class="text-sm font-medium">${b.title}</div>
+            <div class="price"><div>Stars: <strong>${b.stars}</strong></div><div>USD: <strong>$${b.usd}</strong></div></div>
+            <button class="btn-press w-full mt-2 rounded-lg py-2 bg-white/5 border border-white/10">Выбрать</button>
+          </div>
+        </div>
+      `).join('');
+      let chosenTarget = null;
+      targetGrid.querySelectorAll('[data-target]').forEach(card2=>{
+        card2.querySelector('button').addEventListener('click', ()=>{
+          chosenTarget = demoMarket.find(x=>x.id===card2.getAttribute('data-target'));
+          targetGrid.querySelectorAll('.card').forEach(c=>c.style.outline='none');
+          card2.style.outline = '2px solid rgba(56,189,248,.6)';
+        });
+      });
+      document.getElementById('btnRequestSwap').onclick = function(){
+        if (!chosenMine || !chosenTarget){ showToast('Select both gifts'); return; }
+        showToast('Запрос на свап отправлен');
+        closeSheet();
+      };
+    });
+  });
+}
+
+
+// Minimal Buy modal (safe fallback)
+function openBuy(item){
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Confirm purchase</h3>
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3 mb-3">
+      <div class="flex items-center justify-between">
+        <div class="text-sm font-medium">${item.title}</div>
+        <span class="tag">${item.model}</span>
+      </div>
+      <div class="price mt-2">
+        <div>Price: <strong>${item.stars}</strong> STARS</div>
+        <div>Price: <strong>$${item.usd}</strong> USD</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <button id="btnBuyConfirm" class="btn-press rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Pay</button>
+      <button class="btn-press rounded-xl py-3 px-4 bg-white/5 border border-white/10" onclick="closeSheet()">Cancel</button>
+    </div>
+  `;
+  overlay.classList.add('active'); sheet.classList.add('active');
+  const pay = document.getElementById('btnBuyConfirm');
+  if (pay) pay.addEventListener('click', function(){ showToast('Purchase complete'); closeSheet(); });
+}
+
+function hookMarket(){
+  ['fPrice','fNumber','fModel'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', ()=>renderMarket(true));
+    if (id==='fModel') el.addEventListener('change', ()=>renderMarket(true));
+  });
+  document.getElementById('mkLoadMore').addEventListener('click', ()=>{ mkPage++; renderMarket(); });
+  // top buttons
+  document.getElementById('mkBuy').addEventListener('click', ()=>{
+    document.getElementById('mkBuy').className='btn-press rounded-xl py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 font-medium';
+    document.getElementById('mkSell').className='btn-press rounded-xl py-2 bg-white/5 border border-white/10';
+    document.getElementById('mkSwap').className='btn-press rounded-xl py-2 bg-white/5 border border-white/10';
+    
+renderMarket(true);
+// Delegate Buy & More Info (robust)
+document.getElementById('marketGrid').addEventListener('click', function(e){
+  const infoBtn = e.target.closest('button[data-info]');
+  const buyBtn = e.target.closest('button[data-buy]');
+  if (infoBtn){
+    const id = infoBtn.getAttribute('data-info');
+    const item = (typeof demoMarket!=='undefined') ? demoMarket.find(x=>x.id===id) : null;
+    if (item){ openMoreInfo(item); }
+    else { try { const card = infoBtn.closest('.card'); const cid = card && card.getAttribute('data-id'); const it = demoMarket.find(x=>x.id===cid); if (it) openMoreInfo(it); } catch(_) { showToast('Item not found'); } }
+    return;
+  }
+  if (buyBtn){
+    const id = buyBtn.getAttribute('data-buy');
+    const item = demoMarket.find(x=>x.id===id);
+    if (typeof openBuy === 'function' && item) { openBuy(item); }
+    else { showToast(item ? ('Buying ' + item.title) : 'Buying...'); }
+    return;
+  }
+});
+
+  });
+  document.getElementById('mkSell').addEventListener('click', ()=>{
+    // open "list for sale" sheet using existing bottom sheet infra
+    content.innerHTML = `
+      <h3 class="text-lg font-semibold mb-2">List for sale</h3>
+      <div class="rounded-xl border border-white/10 p-3 bg-white/5 mb-3">
+        <div class="text-xs text-gray-400 mb-1">From inventory</div>
+        <select id="sellItem" class="w-full bg-transparent border border-white/10 rounded-lg py-2 px-2">
+          ${MODELS.map((m,i)=>`<option>${m} #${1000+i}</option>`).join('')}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="rounded-xl border border-white/10 p-3 bg-white/5"><div class="text-xs text-gray-400 mb-1">Price (Stars)</div><input id="sellStars" type="number" class="w-full input-tall" placeholder="1000"/></div>
+        <div class="rounded-xl border border-white/10 p-3 bg-white/5"><div class="text-xs text-gray-400 mb-1">Price (USD)</div><input id="sellUsd" type="number" class="w-full input-tall" placeholder="18.00"/></div>
+      </div>
+      <button id="btnListSell" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Publish</button>
+    `;
+    overlay.classList.add('active'); sheet.classList.add('active');
+    document.getElementById('btnListSell').addEventListener('click', ()=>{ showToast('Listing created'); closeSheet(); });
+  });
+  document.getElementById('mkSwap').addEventListener('click', ()=>{ openGiftSwap(); return;
+    openSheet('swap');
+  });
+  renderMarket(true);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  // Initialize market when tab is shown
+  const marketBtn = document.querySelector('.nav-btn[data-target="marketTab"]');
+  if (marketBtn) {
+    marketBtn.addEventListener('click', function(){ setTimeout(hookMarket, 50); }, { once: true });
+  }
+  // Also init if market is default-opened by direct nav
+  if (document.getElementById('marketTab') && !document.getElementById('marketGrid').innerHTML) {
+    // Delay for initial DOM
+    setTimeout(hookMarket, 100);
+  }
 });
 </script>
 

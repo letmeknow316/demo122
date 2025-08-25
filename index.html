@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giftswap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111317;
+            color: white;
+            margin: 0;
+            padding: 0;
+            
+            margin: 0 auto;
+            position: relative;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+        
+        .glow-effect {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--glow-color), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .glow-sol {
+            --glow-color: #9945FF;
+        }
+        
+        .glow-usdt {
+            --glow-color: #26A17B;
+        }
+        
+        .glow-bnb {
+            --glow-color: #F3BA2F;
+        }
+        
+        .btn-press:active {
+            transform: scale(0.98);
+        }
+        
+        .header-image {
+            background: linear-gradient(135deg, #229ED9, #1E88E5);
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-image::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .nav-btn.active {
+            color: #229ED9;
+            position: relative;
+        }
+        
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: #229ED9;
+            border-radius: 50%;
+        }
+    </style>
+
+
+<style>
+/* Stronger blue side light for profile buttons */
+.profile-glow { position: relative; overflow: hidden; }
+.profile-glow::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 80%;
+  height: 160%;
+  background: radial-gradient(65% 65% at 100% 50%, rgba(56, 189, 248, 0.55) 0%, rgba(56, 189, 248, 0.00) 65%);
+  filter: blur(14px);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.profile-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(270deg, rgba(56,189,248,0.28) 0%, rgba(56,189,248,0.10) 40%, rgba(56,189,248,0) 100%);
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.profile-glow:active::after,
+.profile-glow:active::before { opacity: 0.9; }
+</style>
+
+
+<style>
+/* Segmented control for direction */
+.segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.segment button {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+.segment button.active {
+  background: rgba(56,189,248,0.18);
+  color: white;
+}
+
+/* Inputs */
+.input-tall {
+  background: transparent;
+  outline: none;
+  font-size: 18px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  bottom: 90px;
+  background: rgba(15,18,23,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 60;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+/* SVG icon sizing inside chips */
+.token-chip svg { width: 18px; height: 18px; }
+</style>
+
+
+<style>
+/* Inventory button premium style */
+.btn-inventory {
+  position: relative;
+  background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(14,165,233,0.15));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(59,130,246,0.15);
+}
+.btn-inventory::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  pointer-events: none;
+  background: radial-gradient(60% 60% at 95% 20%, rgba(56,189,248,0.35), rgba(56,189,248,0) 60%);
+  filter: blur(14px);
+  opacity: .85;
+}
+.badge-count {
+  font-size: 10px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+</style>
+
+</head>
+<body class="flex flex-col">
+    <!-- Top Navigation Bar -->
+    
+      
+    <header class="bg-black py-3 px-4 flex items-center justify-between fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] z-20 rounded-b-xl">
+        <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                <i class="fas fa-gift text-white"></i>
+            </div>
+            Giftswap⠀⠀⠀⠀⠀⠀⠀
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+            <i class="fas fa-star text-yellow-400 text-sm"></i>
+            <span id="balStars" class="text-sm">12.000</span>
+          </div>
+          <div class="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+            <i class="fas fa-dollar-sign text-green-400 text-sm"></i>
+            <span id="balUSDT" class="text-sm">999.00</span>
+          </div>
+        </div>
+    
+        </div>
+        <div class="w-8 h-8 rounded-full bg-gray-600 overflow-hidden">
+            <img src="https://ui-avatars.com/api/?name=User&background=229ED9&color=fff" alt="Profile" class="w-full h-full object-cover">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="homeTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px]">
+        <!-- Slogan -->
+        <div class="text-center mb-4">
+            <h2 class="text-2xl font-medium text-gray-300">Swap, buy & send.</h2>
+        </div>
+        
+        <!-- Header Image -->
+        <div class="header-image mb-6">
+            <div class="relative z-10">
+                <i class="fas fa-exchange-alt text-white text-4xl opacity-80"></i>
+            </div>
+        </div>
+        
+        <!-- Currency Cards -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <!-- SOL Card -->
+            <div class="glow-effect glow-sol bg-[#1A1C22] p-3 rounded-xl">
+                <div class="flex justify-center mb-2">
+                    <div class="w-10 h-10 rounded-full bg-purple-900 flex items-center justify-center">
+                        <i class="fab fa-ethereum text-purple-400"></i>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-400 mb-1">STARS/SOL</p>
+                <p class="text-center font-semibold text-sm">0.0087</p>
+                <p class="text-center text-[10px] text-gray-500 mt-1">for 100 stars</p>
+            </div>
+            
+            <!-- USDT Card -->
+            <div class="glow-effect glow-usdt bg-[#1A1C22] p-3 rounded-xl">
+                <div class="flex justify-center mb-2">
+                    <div class="w-10 h-10 rounded-full bg-green-900 flex items-center justify-center">
+                        <i class="fas fa-dollar-sign text-green-400"></i>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-400 mb-1">STARS/USDT</p>
+                <p class="text-center font-semibold text-sm">1.80</p>
+                <p class="text-center text-[10px] text-gray-500 mt-1">for 100 stars</p>
+            </div>
+            
+            <!-- BNB Card -->
+            <div class="glow-effect glow-bnb bg-[#1A1C22] p-3 rounded-xl">
+                <div class="flex justify-center mb-2">
+                    <div class="w-10 h-10 rounded-full bg-yellow-900 flex items-center justify-center">
+                        <i class="fab fa-btc text-yellow-400"></i>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-400 mb-1">STARS/BNB</p>
+                <p class="text-center font-semibold text-sm">0.00205</p>
+                <p class="text-center text-[10px] text-gray-500 mt-1">for 100 stars</p>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button id="btnSwapMain" class="btn-press bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-700 flex items-center justify-center">
+                <i class="fas fa-exchange-alt mr-2"></i> Swap
+            </button>
+            <button id="btnDepositMain" class="btn-press border-2 border-blue-500 text-blue-500 font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-900/20 flex items-center justify-center">
+                <i class="fas fa-wallet mr-2"></i> Deposit
+            </button>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="bg-[#1A1C22] rounded-xl p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-medium">Recent Activity</h3>
+                <button class="text-blue-500 text-sm">View All</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mr-2">
+                            <i class="fas fa-arrow-down text-purple-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm">Received</p>
+                            <p class="text-xs text-gray-400">From: @user123</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium">+150 STARS</p>
+                        <p class="text-xs text-gray-400">2 min ago</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mr-2">
+                            <i class="fas fa-exchange-alt text-blue-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm">Swap</p>
+                            <p class="text-xs text-gray-400">STARS to USDT</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium">-200 STARS</p>
+                        <p class="text-xs text-gray-400">1 hour ago</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-2">
+                            <i class="fas fa-shopping-bag text-green-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm">Purchase</p>
+                            <p class="text-xs text-gray-400">Premium Gift</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium">-50 STARS</p>
+                        <p class="text-xs text-gray-400">3 hours ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <main id="marketTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
+        <div class="text-center mb-4">
+            <h2 class="text-2xl font-medium text-gray-300">Marketplace</h2>
+            <p class="text-gray-400 text-sm mt-1">Trading is on the way.</p>
+        </div>
+        <div class="relative mb-6 rounded-2xl overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-emerald-400/20 blur-xl"></div>
+            <div class="relative bg-[#13161c] border border-white/10 rounded-2xl p-6 flex flex-col items-center">
+                <div class="w-24 h-24 rounded-xl bg-white/5 flex items-center justify-center mb-4 shadow-inner">
+                    <i class="fas fa-store text-4xl opacity-80"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-1">Soon</h3>
+                <p class="text-gray-400 text-sm">We’re crafting a sleek market for gifts and swaps.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-white/10 p-4 bg-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Featured Drops</p>
+                        <p class="text-xs text-gray-400">Curated weekly</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-4 bg-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Verified Sellers</p>
+                        <p class="text-xs text-gray-400">Safety-first</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="profileTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
+        <div class="flex flex-col items-center mb-6">
+            <div class="w-20 h-20 rounded-full bg-gray-600 overflow-hidden mb-3 ring-4 ring-white/5">
+                <img id="profileAvatar" src="https://ui-avatars.com/api/?name=User&background=111317&color=fff" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <div class="text-center">
+                <p class="text-sm text-gray-400">ID: <span id="profileId">—</span></p>
+                <p class="text-base font-medium" id="profileName">@user</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3">
+            <button class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Support</p>
+                        <p class="text-xs text-gray-400">Get help from our team</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-500"></i>
+            </button>
+            <button id="btnDepositProfile" class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Deposit</p>
+                        <p class="text-xs text-gray-400">Top up with Stars or TON</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-500"></i>
+            </button>
+            <button id="btnInventory" class="btn-inventory btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Inventory</p>
+                        <p class="text-xs text-gray-400">Your gifts & winnings</p>
+                    </div>
+                </div>
+                <span class="badge-count">12</span>
+            </button>
+        </div>
+    </main>
+
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-black py-3 px-6 flex justify-between fixed bottom-0 left-0 right-0 z-10 max-w-[420px] mx-auto">
+        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200" data-target="marketTab">
+            <i class="fas fa-store text-lg"></i>
+            <span class="mt-1">Market</span>
+        </button>
+        <button class="nav-btn active text-white flex flex-col items-center text-xs transition-colors duration-200" data-target="homeTab">
+            <i class="fas fa-home text-lg"></i>
+            <span class="mt-1">Home</span>
+        </button>
+        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200" data-target="profileTab">
+            <i class="fas fa-user text-lg"></i>
+            <span class="mt-1">Profile</span>
+        </button>
+    </nav>
+
+    <script>
+        // Add button press effect
+        document.querySelectorAll('.btn-press').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+            
+            // For touch devices
+            button.addEventListener('touchstart', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('touchend', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Navigation active state
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</div>
+
+<script>
+function showTab(id) {
+  ['homeTab','marketTab','profileTab'].forEach(function(t){
+    var el = document.getElementById(t);
+    if (!el) return;
+    if (t === id) { el.classList.remove('hidden'); } else { el.classList.add('hidden'); }
+  });
+  document.querySelectorAll('.nav-btn').forEach(function(b){
+    if (b.getAttribute('data-target') === id) { b.classList.add('active'); b.classList.remove('text-gray-400'); b.classList.add('text-white'); }
+    else { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-gray-400'); }
+  });
+}
+document.querySelectorAll('.nav-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){ showTab(this.getAttribute('data-target')); });
+});
+showTab('homeTab');
+
+(function(){
+  try {
+    var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (!tg || !tg.initDataUnsafe) return;
+    var user = tg.initDataUnsafe.user || null;
+    if (!user) return;
+    var avatar = document.getElementById('profileAvatar');
+    var pid = document.getElementById('profileId');
+    var pname = document.getElementById('profileName');
+    if (pid) pid.textContent = user.id || '—';
+    if (pname) pname.textContent = user.username ? '@'+user.username : (user.first_name || 'User');
+    if (avatar && user.photo_url) avatar.src = user.photo_url;
+  } catch(e) {}
+})();
+</script>
+
+
+
+<style>
+/* Bottom Sheet (enhanced) */
+.bs-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity 200ms ease; z-index: 40;
+}
+.bs-overlay.active { opacity: 1; pointer-events: auto; }
+.bs-sheet {
+  position: fixed; left: 50%; transform: translateX(-50%) translateY(100%);
+  bottom: 0; width: 100%; max-width: 420px; background: #0f1217;
+  border-top-left-radius: 16px; border-top-right-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1); z-index: 50;
+}
+.bs-sheet.active { transform: translateX(-50%) translateY(0); }
+.bs-handle { width: 48px; height: 5px; background: rgba(255,255,255,0.15); border-radius: 999px; margin: 10px auto 6px; }
+.token-chip { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); cursor:pointer; user-select:none; }
+.token-chip.active { border-color: rgba(56,189,248,0.6); background: rgba(56,189,248,0.12); }
+</style>
+
+<div id="toast" class="toast">Selected</div>
+<div id="bsOverlay" class="bs-overlay"></div>
+<div id="bsSheet" class="bs-sheet">
+  <div class="bs-handle"></div>
+  <div id="bsContent" class="p-4"></div>
+</div>
+
+<script>
+// === Token Icons (inline SVG) ===
+function tokenIconSVG(sym){
+  switch(sym){
+    case 'STARS': return '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.8 6.4.5-4.8 4.1 1.5 6.1L12 15.8 6.3 18.5l1.5-6.1L3 8.3l6.4-.5L12 2z" fill="url(#g)"/><defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#60A5FA"/><stop offset="1" stop-color="#06B6D4"/></linearGradient></defs></svg>';
+    case 'TON': return '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 7.5-8 10-8-10L12 3z" stroke="#6EE7F9" stroke-width="1.5"/></svg>';
+    case 'SOL': return '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="3" rx="1.5" fill="#A78BFA"/><rect x="4" y="10.5" width="16" height="3" rx="1.5" fill="#34D399"/><rect x="4" y="15" width="16" height="3" rx="1.5" fill="#60A5FA"/></svg>';
+    case 'BNB': return '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l5 5-5 5-5-5 5-5zm0 10l5 5-5 5-5-5 5-5z" fill="#F3BA2F"/></svg>';
+    case 'USDT': return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#26A17B"/><rect x="6" y="9" width="12" height="2" rx="1" fill="#fff"/><rect x="11" y="11" width="2" height="6" rx="1" fill="#fff"/></svg>';
+    case 'USDC': return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#2775CA"/><path d="M9 8h6v8H9z" fill="#fff"/></svg>';
+    default: return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#94a3b8"/></svg>';
+  }
+}
+
+function chipHTML(sym){
+  const labels = { STARS:'Telegram Stars', TON:'TON', SOL:'Solana', BNB:'BNB', USDT:'Tether (USDT)', USDC:'USD Coin (USDC)' };
+  return tokenIconSVG(sym) + '<span>'+ (labels[sym] || sym) +'</span>';
+}
+
+// === Rates & Fee (placeholder; update with real rates via API in prod) ===
+const RATES_USD = {
+  STARS: 0.018,    // 100 Stars = $1.8
+  TON:   6.00,
+  SOL:   150.00,
+  BNB:   550.00,
+  USDT:  1.00,
+  USDC:  1.00
+};
+const FEE_PCT = 0.02; // 2% service fee
+
+function convert(amount, from, to){
+  if (!amount || amount <= 0) return 0;
+  const usd = amount * (RATES_USD[from] || 0);
+  const gross = usd / (RATES_USD[to] || 1);
+  const net = gross * (1 - FEE_PCT);
+  return net;
+}
+
+// === Bottom Sheet Logic ===
+const overlay = document.getElementById('bsOverlay');
+const sheet = document.getElementById('bsSheet');
+const content = document.getElementById('bsContent');
+const toast = document.getElementById('toast');
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=> toast.classList.remove('show'), 1400);
+}
+
+function openSheet(kind){
+  if (kind === 'swap'){
+    const saved = localStorage.getItem('swap_token') || 'USDT';
+    const dir = localStorage.getItem('swap_dir') || 'stars_to_crypto';
+    content.innerHTML = `
+      <h3 class="text-lg font-semibold mb-2">Swap</h3>
+      <div class="segment mb-3">
+        <button id="dirStarsTo" class="` + (dir==='stars_to_crypto' ? 'active' : '') + `">Stars → Crypto</button>
+        <button id="dirCryptoTo" class="` + (dir==='crypto_to_stars' ? 'active' : '') + `">Crypto → Stars</button>
+      </div>
+      <div id="swapFrom" class="rounded-xl border border-white/10 p-3 mb-3 bg-white/5"></div>
+      <div id="swapTo" class="rounded-xl border border-white/10 p-3 mb-3 bg-white/5"></div>
+      <div class="grid grid-cols-2 gap-3 mb-2">
+        <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+          <div class="text-xs text-gray-400 mb-1">You pay</div>
+          <input id="amountIn" type="number" placeholder="0.00" class="w-full input-tall" />
+        </div>
+        <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+          <div class="text-xs text-gray-400 mb-1">You get</div>
+          <div class="text-lg" id="amountOut">~ 0</div>
+        </div>
+      </div>
+      <div class="text-xs text-gray-400 mb-3" id="rateLine"></div>
+      <button id="btnContinueSwap" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition">Continue</button>
+    `;
+    renderSwapSides();
+    hookSwapLogicFull();
+  } else if (kind === 'deposit'){
+    const saved = localStorage.getItem('deposit_token') || 'STARS';
+    content.innerHTML = `<h3 class="text-lg font-semibold mb-2">Deposit</h3><div id="depTokens" class="flex flex-wrap gap-2 mb-4"></div><div id="depActions"></div>`;
+    renderTokenChips('depTokens', ['STARS','TON','SOL','BNB','USDT','USDC'], saved, false);
+    hookDepositLogic(saved);
+  }
+  overlay.classList.add('active');
+
+
+  sheet.classList.add('active');
+}
+
+function renderTokenChips(containerId, tokens, preset, forSwap){
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  tokens.forEach((t)=>{
+    const chip = document.createElement('div');
+    chip.className = 'token-chip' + (preset===t ? ' active' : '');
+    chip.innerHTML = chipHTML(t);
+    chip.addEventListener('click', ()=>{
+      Array.from(c.children).forEach(el=>el.classList.remove('active'));
+      chip.classList.add('active');
+      if (forSwap){
+        localStorage.setItem('swap_token', t);
+        showToast('Selected ' + (t==='STARS'?'Stars':t));
+        updateRatePreview();
+      } else {
+        localStorage.setItem('deposit_token', t);
+        showToast('Selected ' + (t==='STARS'?'Stars':t));
+        hookDepositLogic(t);
+      }
+    });
+    c.appendChild(chip);
+  });
+}
+
+function hookSwapLogic(){
+  const dirStarsTo = document.getElementById('dirStarsTo');
+  const dirCryptoTo = document.getElementById('dirCryptoTo');
+  const amountIn = document.getElementById('amountIn');
+  const amountOut = document.getElementById('amountOut');
+
+  function setDir(starsTo){
+    localStorage.setItem('swap_dir', starsTo ? 'stars_to_crypto' : 'crypto_to_stars');
+    dirStarsTo.classList.toggle('active', starsTo);
+    dirCryptoTo.classList.toggle('active', !starsTo);
+    const fromLabel = document.getElementById('fromLabel');
+    const fromTicker = document.getElementById('fromTicker');
+    const swapFromIconBox = document.querySelector('#swapFrom .w-8.h-8.rounded-full');
+    if (starsTo){
+      fromLabel.textContent = 'Telegram Stars';
+      fromTicker.textContent = 'STARS';
+      if (swapFromIconBox) swapFromIconBox.innerHTML = tokenIconSVG('STARS');
+      // ensure 'To' is a crypto
+      const t = localStorage.getItem('swap_to_token') || 'SOL';
+      if (t==='STARS'){ localStorage.setItem('swap_token', 'SOL'); }
+    } else {
+      // From = selected crypto, To = Stars
+      const t = localStorage.getItem('swap_to_token') || 'SOL';
+      fromLabel.textContent = {'TON':'TON','SOL':'Solana','BNB':'BNB','USDT':'Tether (USDT)','USDC':'USD Coin (USDC)'}[t] || t;
+      fromTicker.textContent = t;
+      if (swapFromIconBox) swapFromIconBox.innerHTML = tokenIconSVG(t);
+    }
+    updateRatePreview();
+  }
+
+  dirStarsTo.addEventListener('click', ()=>{ setDir(true); });
+  dirCryptoTo.addEventListener('click', ()=>{ setDir(false); });
+  amountIn.addEventListener('input', updateRatePreview);
+
+  setDir(localStorage.getItem('swap_dir')!=='crypto_to_stars');
+  updateRatePreview();
+}
+
+function updateRatePreview(){
+  const amountIn = parseFloat((document.getElementById('amountIn').value || '0'));
+  const dirStarsTo = (localStorage.getItem('swap_dir')!=='crypto_to_stars');
+  const toToken = localStorage.getItem('swap_to_token') || 'SOL';
+  let from = dirStarsTo ? 'STARS' : toToken;
+  let to = dirStarsTo ? toToken : 'STARS';
+
+  const out = convert(amountIn || 0, from, to);
+  document.getElementById('amountOut').textContent = '~ ' + (isFinite(out) ? out.toFixed(6).replace(/\.?0+$/,'') : '0');
+
+  // Rate line
+  const feePct = (FEE_PCT*100).toFixed(1).replace(/\.0$/,'');
+  const rateLine = document.getElementById('rateLine');
+  const rate = (RATES_USD[from] && RATES_USD[to]) ? (RATES_USD[from]/RATES_USD[to]) : 0;
+  rateLine.textContent = 'Rate: 1 ' + from + ' ≈ ' + (rate ? rate.toFixed(6).replace(/\.?0+$/,'') : '—') + ' ' + to + ' · Fee ' + feePct + '%';
+}
+
+function hookDepositLogic(sel){
+  const c = document.getElementById('depActions');
+  const t = sel || (localStorage.getItem('deposit_token') || 'STARS');
+  if (t === 'STARS'){
+    const linkHttps = 'https://t.me/Gifts_Craft_Bot?start=deposit_stars';
+    const linkTg = 'tg://resolve?domain=Gifts_Craft_Bot&start=deposit_stars';
+    c.innerHTML = `
+      <div class="rounded-xl border border-white/10 p-4 bg-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">`+ tokenIconSVG('STARS') +`</div>
+          <div>
+            <div class="text-sm font-medium">Deposit via Telegram</div>
+            <div class="text-xs text-gray-400">Gifts_Craft_Bot</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="`+ linkHttps +`" class="btn-press text-center rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Open in Telegram</a>
+          <a href="`+ linkTg +`" class="btn-press text-center rounded-xl py-3 px-4 bg-white/10 border border-white/10">Open (tg://)</a>
+        </div>
+      </div>
+    `;
+  } else {
+    c.innerHTML = `
+      <div class="rounded-xl border border-white/10 p-4 bg-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">`+ tokenIconSVG(t) +`</div>
+          <div>
+            <div class="text-sm font-medium">Deposit `+ t +`</div>
+            <div class="text-xs text-gray-400">We’ll show address & memo when connected.</div>
+          </div>
+        </div>
+        <button class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Show deposit details</button>
+      </div>
+    `;
+  }
+}
+
+function closeSheet(){ overlay.classList.remove('active'); sheet.classList.remove('active'); }
+overlay.addEventListener('click', closeSheet);
+
+
+
+function renderSwapSides(){
+  const dir = localStorage.getItem('swap_dir') || 'stars_to_crypto';
+  const saved = localStorage.getItem('swap_token') || 'USDT';
+  const fromBox = document.getElementById('swapFrom');
+  const toBox = document.getElementById('swapTo');
+  if (dir === 'stars_to_crypto'){
+    // From: STARS fixed
+    fromBox.innerHTML = `
+      <div class="text-xs text-gray-400 mb-1">From</div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">`+ tokenIconSVG('STARS') +`</div>
+          <div><div class="text-sm font-medium">Telegram Stars</div><div class="text-xs text-gray-500">STARS</div></div>
+        </div>
+        <div class="text-sm text-gray-400">Balance: —</div>
+      </div>`;
+    // To: selectable crypto
+    toBox.innerHTML = `<div class="text-xs text-gray-400 mb-2">To</div><div id="swapTokens" class="flex flex-wrap gap-2"></div>`;
+    renderTokenChips('swapTokens', ['TON','SOL','BNB','USDT','USDC'], saved, true);
+  } else {
+    // From: selectable crypto
+    fromBox.innerHTML = `<div class="text-xs text-gray-400 mb-2">From</div><div id="swapTokens" class="flex flex-wrap gap-2"></div>`;
+    renderTokenChips('swapTokens', ['TON','SOL','BNB','USDT','USDC'], saved, true);
+    // To: STARS fixed
+    toBox.innerHTML = `
+      <div class="text-xs text-gray-400 mb-1">To</div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">`+ tokenIconSVG('STARS') +`</div>
+        <div><div class="text-sm font-medium">Telegram Stars</div><div class="text-xs text-gray-500">STARS</div></div>
+      </div>`;
+  }
+}
+
+function hookSwapLogicFull(){
+  const dirStarsTo = document.getElementById('dirStarsTo');
+  const dirCryptoTo = document.getElementById('dirCryptoTo');
+  const amountIn = document.getElementById('amountIn');
+  dirStarsTo.addEventListener('click', ()=>{ localStorage.setItem('swap_dir','stars_to_crypto'); dirStarsTo.classList.add('active'); dirCryptoTo.classList.remove('active'); renderSwapSides(); updateRatePreviewFull(); });
+  dirCryptoTo.addEventListener('click', ()=>{ localStorage.setItem('swap_dir','crypto_to_stars'); dirCryptoTo.classList.add('active'); dirStarsTo.classList.remove('active'); renderSwapSides(); updateRatePreviewFull(); });
+  amountIn.addEventListener('input', updateRatePreviewFull);
+  updateRatePreviewFull();
+}
+
+function updateRatePreviewFull(){
+  const dir = localStorage.getItem('swap_dir') || 'stars_to_crypto';
+  const token = localStorage.getItem('swap_token') || 'USDT';
+  const amountIn = parseFloat((document.getElementById('amountIn').value || '0'));
+  let from = (dir==='stars_to_crypto') ? 'STARS' : token;
+  let to   = (dir==='stars_to_crypto') ? token     : 'STARS';
+  const out = convert(amountIn || 0, from, to);
+  document.getElementById('amountOut').textContent = '~ ' + (isFinite(out) ? out.toFixed(6).replace(/\.0+$/,'') : '0');
+  const feePct = (FEE_PCT*100).toFixed(1).replace(/\.0$/,'');
+  const rate = (RATES_USD[from] && RATES_USD[to]) ? (RATES_USD[from]/RATES_USD[to]) : 0;
+  document.getElementById('rateLine').textContent = 'Rate: 1 ' + from + ' ≈ ' + (rate ? rate.toFixed(6).replace(/\.0+$/,'') : '—') + ' ' + to + ' · Fee ' + feePct + '%';
+}
+
+// Hook buttons on page
+document.addEventListener('DOMContentLoaded', function(){
+  var swapMain = document.getElementById('btnSwapMain');
+  var depMain = document.getElementById('btnDepositMain');
+  var depProfile = document.getElementById('btnDepositProfile');
+  if (swapMain) swapMain.addEventListener('click', function(){ openSheet('swap'); });
+  if (depMain) depMain.addEventListener('click', function(){ openSheet('deposit'); });
+  if (depProfile) depProfile.addEventListener('click', function(){ openSheet('deposit'); });
+});
+</script>
+
+
+<script>
+function openInventory(){
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Inventory</h3>
+    <div class="grid grid-cols-2 gap-3">
+      ${['Rocket Gift','Diamond Gift','Gold Cup','Lucky Cat'].map((name,i)=>`
+        <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+          <div class="w-full h-24 rounded-lg bg-white/10 mb-2 flex items-center justify-center">
+            <span class="text-sm text-gray-300">${name}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-gray-400">Rarity: ${['Common','Rare','Epic','Legendary'][i%4]}</span>
+            <button class="text-xs px-2 py-1 rounded bg-blue-500/70">Sell</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  overlay.classList.add('active');
+  sheet.classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var inv = document.getElementById('btnInventory');
+  if (inv) inv.addEventListener('click', function(){ openInventory(); });
+});
+</script>
+
+</body>
+</html>

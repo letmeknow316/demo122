@@ -296,10 +296,10 @@
         
         <!-- Action Buttons -->
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <button id="btnSwapMain" class="btn-press bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-700 flex items-center justify-center">
+            <button id="btnSwapMain" class="btn-press bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-700 flex items-center justify-center mt-2">
                 <i class="fas fa-exchange-alt mr-2"></i> Swap
             </button>
-            <button id="btnDepositMain" class="btn-press border-2 border-blue-500 text-blue-500 font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-900/20 flex items-center justify-center">
+            <button id="btnDepositMain" class="btn-press border-2 border-blue-500 text-blue-500 font-medium py-3 rounded-xl transition-all duration-200 active:bg-blue-900/20 flex items-center justify-center mt-2">
                 <i class="fas fa-wallet mr-2"></i> Deposit
             </button>
         </div>
@@ -308,7 +308,7 @@
         <div class="bg-[#1A1C22] rounded-xl p-4">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-medium">Recent Activity</h3>
-                <button class="text-blue-500 text-sm">View All</button>
+                <button class="text-blue-500 text-sm mt-2">View All</button>
             </div>
             
             <div class="space-y-3">
@@ -361,7 +361,8 @@
                 </div>
             </div>
         </div>
-    </main>
+    
+</main>
     <main id="marketTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
         <div class="text-center mb-4">
             <h2 class="text-2xl font-medium text-gray-300">Marketplace</h2>
@@ -374,7 +375,7 @@
                     <i class="fas fa-store text-4xl opacity-80"></i>
                 </div>
                 <h3 class="text-xl font-semibold mb-1">Soon</h3>
-                <p class="text-gray-400 text-sm">We’re crafting a sleek market for gifts and swaps.</p>
+                <p class="text-gray-400 text-sm">We’re ing a sleek market for gifts and swaps.</p>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -401,7 +402,8 @@
                 </div>
             </div>
         </div>
-    </main>
+    
+</main>
 
     <main id="profileTab" class="flex-1 overflow-y-auto pt-20 pb-24 px-4 mx-auto w-full max-w-[420px] hidden">
         <div class="flex flex-col items-center mb-6">
@@ -414,7 +416,7 @@
             </div>
         </div>
         <div class="grid grid-cols-1 gap-3">
-            <button class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+            <button class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow mt-2">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
                         <i class="fas fa-life-ring"></i>
@@ -426,7 +428,7 @@
                 </div>
                 <i class="fas fa-chevron-right text-gray-500"></i>
             </button>
-            <button id="btnDepositProfile" class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+            <button id="btnDepositProfile" class="btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow mt-2">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
                         <i class="fas fa-download"></i>
@@ -438,7 +440,7 @@
                 </div>
                 <i class="fas fa-chevron-right text-gray-500"></i>
             </button>
-            <button id="btnInventory" class="btn-inventory btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow">
+            <button id="btnInventory" class="btn-press profile-glow btn-inventory btn-press w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between profile-glow mt-2">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
                         <i class="fas fa-box-open"></i>
@@ -450,21 +452,48 @@
                 </div>
                 <span class="badge-count">12</span>
             </button>
+    <button id="btnWithdrawal" class="btn-press profile-glow w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between mt-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+          <i class="fas fa-arrow-up-right-from-square"></i>
         </div>
-    </main>
+        <div>
+          <p class="text-sm font-medium">Withdrawal</p>
+          <p class="text-xs text-gray-400">Send out gifts or crypto</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-gray-500"></i>
+    </button>
+
+    <button id="btnMyAssets" class="btn-press profile-glow w-full rounded-xl py-3 px-4 bg-white/5 border border-white/10 flex items-center justify-between mt-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+          <i class="fas fa-coins"></i>
+        </div>
+        <div>
+          <p class="text-sm font-medium">Мои активы</p>
+          <p class="text-xs text-gray-400">Все доступные монеты и Звезды</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-gray-500"></i>
+    </button>
+
+        </div>
+    
+</main>
 
 
     <!-- Bottom Navigation Bar -->
     <nav class="bg-black py-3 px-6 flex justify-between fixed bottom-0 left-0 right-0 z-10 max-w-[420px] mx-auto">
-        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200" data-target="marketTab">
+        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200 mt-2" data-target="marketTab">
             <i class="fas fa-store text-lg"></i>
             <span class="mt-1">Market</span>
         </button>
-        <button class="nav-btn active text-white flex flex-col items-center text-xs transition-colors duration-200" data-target="homeTab">
+        <button class="nav-btn active text-white flex flex-col items-center text-xs transition-colors duration-200 mt-2" data-target="homeTab">
             <i class="fas fa-home text-lg"></i>
             <span class="mt-1">Home</span>
         </button>
-        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200" data-target="profileTab">
+        <button class="nav-btn text-gray-400 flex flex-col items-center text-xs transition-colors duration-200 mt-2" data-target="profileTab">
             <i class="fas fa-user text-lg"></i>
             <span class="mt-1">Profile</span>
         </button>
@@ -623,8 +652,8 @@ function openSheet(kind){
     content.innerHTML = `
       <h3 class="text-lg font-semibold mb-2">Swap</h3>
       <div class="segment mb-3">
-        <button id="dirStarsTo" class="` + (dir==='stars_to_crypto' ? 'active' : '') + `">Stars → Crypto</button>
-        <button id="dirCryptoTo" class="` + (dir==='crypto_to_stars' ? 'active' : '') + `">Crypto → Stars</button>
+        <button id="dirStarsTo" class="` + (dir==='stars_to_crypto' ? 'active' : '') + ` mt-2">Stars → Crypto</button>
+        <button id="dirCryptoTo" class="` + (dir==='crypto_to_stars' ? 'active' : '') + ` mt-2">Crypto → Stars</button>
       </div>
       <div id="swapFrom" class="rounded-xl border border-white/10 p-3 mb-3 bg-white/5"></div>
       <div id="swapTo" class="rounded-xl border border-white/10 p-3 mb-3 bg-white/5"></div>
@@ -639,7 +668,7 @@ function openSheet(kind){
         </div>
       </div>
       <div class="text-xs text-gray-400 mb-3" id="rateLine"></div>
-      <button id="btnContinueSwap" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition">Continue</button>
+      <button id="btnContinueSwap" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition mt-2">Continue</button>
     `;
     renderSwapSides();
     hookSwapLogicFull();
@@ -738,15 +767,15 @@ function hookDepositLogic(sel){
   const c = document.getElementById('depActions');
   const t = sel || (localStorage.getItem('deposit_token') || 'STARS');
   if (t === 'STARS'){
-    const linkHttps = 'https://t.me/Gifts_Craft_Bot?start=deposit_stars';
-    const linkTg = 'tg://resolve?domain=Gifts_Craft_Bot&start=deposit_stars';
+    const linkHttps = 'https://t.me/Giftswapp_Bot?start=deposit_stars';
+    const linkTg = 'tg://resolve?domain=Giftswapp_Bot&start=deposit_stars';
     c.innerHTML = `
       <div class="rounded-xl border border-white/10 p-4 bg-white/5">
         <div class="flex items-center gap-3 mb-3">
           <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">`+ tokenIconSVG('STARS') +`</div>
           <div>
             <div class="text-sm font-medium">Deposit via Telegram</div>
-            <div class="text-xs text-gray-400">Gifts_Craft_Bot</div>
+            <div class="text-xs text-gray-400">Giftswapp_Bot</div>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -765,7 +794,7 @@ function hookDepositLogic(sel){
             <div class="text-xs text-gray-400">We’ll show address & memo when connected.</div>
           </div>
         </div>
-        <button class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700">Show deposit details</button>
+        <button class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 mt-2">Show deposit details</button>
       </div>
     `;
   }
@@ -856,7 +885,7 @@ function openInventory(){
           </div>
           <div class="flex items-center justify-between">
             <span class="text-xs text-gray-400">Rarity: ${['Common','Rare','Epic','Legendary'][i%4]}</span>
-            <button class="text-xs px-2 py-1 rounded bg-blue-500/70">Sell</button>
+            <button class="text-xs px-2 py-1 rounded bg-blue-500/70 mt-2">Sell</button>
           </div>
         </div>
       `).join('')}
@@ -869,6 +898,303 @@ function openInventory(){
 document.addEventListener('DOMContentLoaded', function(){
   var inv = document.getElementById('btnInventory');
   if (inv) inv.addEventListener('click', function(){ openInventory(); });
+});
+</script>
+
+
+<script>
+function openWithdrawal(){
+  const savedToken = localStorage.getItem('withdraw_token') || 'USDT';
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Withdrawal</h3>
+    <div class="mb-3">
+      <div class="text-xs text-gray-400 mb-2">Asset</div>
+      <div id="wdTokens" class="flex flex-wrap gap-2"></div>
+    </div>
+    <div class="mb-3">
+      <div class="text-xs text-gray-400 mb-2">Network</div>
+      <div id="wdNetworks" class="flex flex-wrap gap-2"></div>
+    </div>
+    <div class="grid grid-cols-1 gap-3 mb-3">
+      <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+        <div class="text-xs text-gray-400 mb-1">Recipient address</div>
+        <input id="wdAddress" type="text" placeholder="Paste address..." class="w-full input-tall" />
+      </div>
+      <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+        <div class="text-xs text-gray-400 mb-1">Amount</div>
+        <input id="wdAmount" type="number" placeholder="0.00" class="w-full input-tall" />
+      </div>
+    </div>
+    <div id="wdNote" class="text-xs text-gray-400 mb-3"></div>
+    <button id="btnSubmitWithdrawal" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition mt-2">Continue</button>
+  `;
+  renderTokenChips('wdTokens', ['STARS','USDT','USDC','TON','SOL','BNB'], savedToken, false);
+  buildNetworks(savedToken);
+  const container = document.getElementById('wdTokens');
+  Array.from(container.children).forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.textContent;
+      let sym = 'USDT';
+      if (text.includes('Telegram Stars')) sym = 'STARS';
+      else if (text.includes('USD Coin')) sym = 'USDC';
+      else if (text.includes('TON')) sym = 'TON';
+      else if (text.includes('Solana')) sym = 'SOL';
+      else if (text.includes('BNB')) sym = 'BNB';
+      localStorage.setItem('withdraw_token', sym);
+      buildNetworks(sym);
+    });
+  });
+  document.getElementById('btnSubmitWithdrawal').addEventListener('click', function(){
+    const addr = document.getElementById('wdAddress').value.trim();
+    const amt = parseFloat((document.getElementById('wdAmount').value||'0'));
+    if (!addr) { showToast('Enter address'); return; }
+    if (!amt || amt<=0) { showToast('Enter amount'); return; }
+    showToast('Withdrawal created');
+    closeSheet();
+  });
+  overlay.classList.add('active');
+  sheet.classList.add('active');
+}
+
+function buildNetworks(sym){
+  const map = {
+    'STARS': ['Telegram'],
+    'USDT': ['TRC20','ERC20','BEP20','TON','SOL'],
+    'USDC': ['ERC20','BEP20','SOL','TON'],
+    'TON':  ['TON'],
+    'SOL':  ['Solana'],
+    'BNB':  ['BEP20']
+  };
+  const noteMap = {
+    'TRC20':'Network: TRON (USDT-TRC20)',
+    'ERC20':'Network: Ethereum (gas fees apply)',
+    'BEP20':'Network: BNB Smart Chain',
+    'TON':'Network: TON (Jettons)',
+    'SOL':'Network: Solana (SPL tokens)',
+    'Solana':'Network: Solana',
+    'Telegram':'Withdrawal to Telegram balance'
+  };
+  const nets = map[sym] || ['ERC20'];
+  const cont = document.getElementById('wdNetworks');
+  cont.innerHTML = '';
+  nets.forEach((n,i)=>{
+    const chip = document.createElement('div');
+    chip.className = 'token-chip' + (i===0 ? ' active' : '');
+    chip.innerHTML = '<span>'+n+'</span>';
+    chip.addEventListener('click', ()=>{
+      Array.from(cont.children).forEach(el=>el.classList.remove('active'));
+      chip.classList.add('active');
+      document.getElementById('wdNote').textContent = noteMap[n] || '';
+    });
+    cont.appendChild(chip);
+  });
+  document.getElementById('wdNote').textContent = noteMap[nets[0]] || '';
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var wdbtn = document.getElementById('btnWithdrawal');
+  if (wdbtn) wdbtn.addEventListener('click', function(){ openWithdrawal(); });
+});
+</script>
+
+
+<script>
+// --- Fee tables ---
+const WD_SERVICE_FEE_PCT = 0.02; // 2% platform fee
+const WD_NETWORK_FEES = {
+  STARS: { Telegram: { fixed: 0, unit: 'STARS' } },
+  USDT: { TRC20:{fixed:1,unit:'USDT'}, ERC20:{fixed:5,unit:'USDT'}, BEP20:{fixed:0.8,unit:'USDT'}, TON:{fixed:1,unit:'USDT'}, SOL:{fixed:1,unit:'USDT'} },
+  USDC: { ERC20:{fixed:5,unit:'USDC'}, BEP20:{fixed:0.8,unit:'USDC'}, SOL:{fixed:0.5,unit:'USDC'}, TON:{fixed:1,unit:'USDC'} },
+  TON:  { TON:{fixed:0.05,unit:'TON'} },
+  SOL:  { Solana:{fixed:0.001,unit:'SOL'} },
+  BNB:  { BEP20:{fixed:0.0005,unit:'BNB'} }
+};
+
+// --- Address validation regex & masks ---
+const ADDRESS_RULES = {
+  Telegram: { pattern: /^(@[a-zA-Z0-9_]{3,32}|\d{5,20})$/, placeholder: '@username или ID' },
+  TRC20:    { pattern: /^T[1-9A-HJ-NP-Za-km-z]{33}$/ , placeholder: 'T... (TRON)' },
+  ERC20:    { pattern: /^0x[a-fA-F0-9]{40}$/ , placeholder: '0x... (Ethereum)' },
+  BEP20:    { pattern: /^0x[a-fA-F0-9]{40}$/ , placeholder: '0x... (BSC)' },
+  TON:      { pattern: /^(EQ|UQ)[A-Za-z0-9_-]{46}$/ , placeholder: 'EQ... / UQ... (TON)' },
+  Solana:   { pattern: /^[1-9A-HJ-NP-Za-km-z]{32,44}$/ , placeholder: 'Base58 (Solana)' }
+};
+
+function validateAddressByNetwork(address, network){
+  const rule = ADDRESS_RULES[network];
+  if (!rule) return true;
+  return rule.pattern.test(address.trim());
+}
+
+function maskAddressInput(inputEl, network){
+  const rule = ADDRESS_RULES[network];
+  if (!rule) { inputEl.placeholder = 'Address'; return; }
+  inputEl.placeholder = rule.placeholder;
+  // Light mask: strip spaces, uppercase HEX for 0x addresses
+  inputEl.addEventListener('input', ()=>{
+    let v = inputEl.value.replace(/\s+/g, '');
+    if (network==='ERC20' || network==='BEP20') v = v.replace(/^0x/, '0x').replace(/[^0-9a-fA-Fx]/g,'');
+    inputEl.value = v;
+  }, { once: true });
+}
+
+// Override openWithdrawal with enhanced version
+function openWithdrawal(){
+  const savedToken = localStorage.getItem('withdraw_token') || 'USDT';
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Withdrawal</h3>
+    <div class="mb-3">
+      <div class="text-xs text-gray-400 mb-2">Asset</div>
+      <div id="wdTokens" class="flex flex-wrap gap-2"></div>
+    </div>
+    <div class="mb-3">
+      <div class="text-xs text-gray-400 mb-2">Network</div>
+      <div id="wdNetworks" class="flex flex-wrap gap-2"></div>
+    </div>
+    <div class="grid grid-cols-1 gap-3 mb-3">
+      <div class="rounded-xl border border-white/10 p-3 bg-white/5" id="addrWrap">
+        <div class="text-xs text-gray-400 mb-1">Recipient address</div>
+        <input id="wdAddress" type="text" placeholder="Address" class="w-full input-tall" />
+        <div id="addrHelp" class="text-xs mt-1"></div>
+      </div>
+      <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+        <div class="text-xs text-gray-400 mb-1">Amount</div>
+        <input id="wdAmount" type="number" placeholder="0.00" class="w-full input-tall" />
+      </div>
+    </div>
+    <div class="fee-line mb-1" id="feeLine">Fee: —</div>
+    <div class="summary-line mb-3" id="sumLine">You send: — · Recipient gets: —</div>
+    <button id="btnSubmitWithdrawal" class="btn-press w-full rounded-xl py-3 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition mt-2">Continue</button>
+  `;
+  renderTokenChips('wdTokens', ['STARS','USDT','USDC','TON','SOL','BNB'], savedToken, false);
+  buildNetworksEnhanced(savedToken);
+  // bind token chip clicks to rebuild networks
+  const container = document.getElementById('wdTokens');
+  Array.from(container.children).forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.textContent;
+      let sym = 'USDT';
+      if (text.includes('Telegram Stars')) sym = 'STARS';
+      else if (text.includes('USD Coin')) sym = 'USDC';
+      else if (text.includes('TON')) sym = 'TON';
+      else if (text.includes('Solana')) sym = 'SOL';
+      else if (text.includes('BNB')) sym = 'BNB';
+      localStorage.setItem('withdraw_token', sym);
+      buildNetworksEnhanced(sym);
+    });
+  });
+  document.getElementById('btnSubmitWithdrawal').addEventListener('click', function(){
+    const addr = document.getElementById('wdAddress').value.trim();
+    const amt = parseFloat((document.getElementById('wdAmount').value||'0'));
+    const n = getSelectedNetwork();
+    const sym = localStorage.getItem('withdraw_token') || 'USDT';
+    if (!addr) { showAddressError('Enter address', n); return; }
+    if (!validateAddressByNetwork(addr, n)) { showAddressError('Invalid address for '+n, n); return; }
+    if (!amt || amt<=0) { showToast('Enter amount'); return; }
+    showToast('Withdrawal created');
+    closeSheet();
+  });
+  overlay.classList.add('active');
+  sheet.classList.add('active');
+}
+
+function getSelectedNetwork(){
+  const cont = document.getElementById('wdNetworks');
+  const active = Array.from(cont.children).find(el=>el.classList.contains('active'));
+  return active ? active.textContent.trim() : '';
+}
+
+function showAddressError(msg, network){
+  const wrap = document.getElementById('addrWrap');
+  const help = document.getElementById('addrHelp');
+  wrap.classList.add('input-error');
+  help.className = 'help-error text-xs mt-1';
+  help.textContent = msg + (ADDRESS_RULES[network] ? ' · ' + ADDRESS_RULES[network].placeholder : '');
+  setTimeout(()=>{ wrap.classList.remove('input-error'); help.className='text-xs mt-1 text-gray-400'; }, 1800);
+}
+
+function buildNetworksEnhanced(sym){
+  const map = {
+    'STARS': ['Telegram'],
+    'USDT': ['TRC20','ERC20','BEP20','TON','SOL'],
+    'USDC': ['ERC20','BEP20','SOL','TON'],
+    'TON':  ['TON'],
+    'SOL':  ['Solana'],
+    'BNB':  ['BEP20']
+  };
+  const nets = map[sym] || ['ERC20'];
+  const cont = document.getElementById('wdNetworks');
+  cont.innerHTML = '';
+  nets.forEach((n,i)=>{
+    const chip = document.createElement('div');
+    chip.className = 'token-chip' + (i===0 ? ' active' : '');
+    chip.textContent = n;
+    chip.addEventListener('click', ()=>{
+      Array.from(cont.children).forEach(el=>el.classList.remove('active'));
+      chip.classList.add('active');
+      onWdParamsChange();
+    });
+    cont.appendChild(chip);
+  });
+  onWdParamsChange();
+}
+
+function onWdParamsChange(){
+  const sym = localStorage.getItem('withdraw_token') || 'USDT';
+  const net = getSelectedNetwork();
+  const addrInput = document.getElementById('wdAddress');
+  const amountEl = document.getElementById('wdAmount');
+  maskAddressInput(addrInput, net);
+  const amt = parseFloat((amountEl.value||'0')) || 0;
+  const feeLine = document.getElementById('feeLine');
+  const sumLine = document.getElementById('sumLine');
+  const feeObj = (WD_NETWORK_FEES[sym] && WD_NETWORK_FEES[sym][net]) ? WD_NETWORK_FEES[sym][net] : {fixed:0,unit:sym};
+  const serviceFee = amt * WD_SERVICE_FEE_PCT;
+  const totalFeeStr = `${feeObj.fixed} ${feeObj.unit} + ${ (serviceFee).toFixed(8).replace(/\.0+$/,'') } ${sym}`;
+  const recipientGets = Math.max(0, amt - feeObj.fixed - serviceFee);
+  feeLine.textContent = `Fee: Network ${feeObj.fixed} ${feeObj.unit} + Service ${(WD_SERVICE_FEE_PCT*100).toFixed(1).replace(/\.0$/,'')}%`;
+  sumLine.textContent = `You send: ${amt || 0} ${sym} · Recipient gets: ${recipientGets.toFixed(8).replace(/\.0+$/,'')} ${sym}`;
+}
+
+// Recompute when amount changes
+document.addEventListener('input', function(e){
+  if (e.target && e.target.id === 'wdAmount') onWdParamsChange();
+});
+
+// --- My Assets bottom sheet ---
+function openMyAssets(){
+  const assets = [
+    { sym:'STARS', name:'Telegram Stars', bal:'12,345' },
+    { sym:'USDT', name:'Tether (USDT)', bal:'678.90' },
+    { sym:'USDC', name:'USD Coin (USDC)', bal:'120.00' },
+    { sym:'TON',  name:'TON', bal:'15.3' },
+    { sym:'SOL',  name:'Solana', bal:'3.25' },
+    { sym:'BNB',  name:'BNB', bal:'0.87' }
+  ];
+  content.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2">Мои активы</h3>
+    <div class="assets-grid">
+      ${assets.map(a => `
+        <div class="asset-card">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">${tokenIconSVG(a.sym)}</div>
+            <div>
+              <div class="sym">${a.sym}</div>
+              <div class="bal">${a.name}</div>
+            </div>
+          </div>
+          <div class="text-sm">Balance: <span class="text-gray-300">${a.bal}</span></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  overlay.classList.add('active');
+  sheet.classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var myAssetsBtn = document.getElementById('btnMyAssets');
+  if (myAssetsBtn) myAssetsBtn.addEventListener('click', function(){ openMyAssets(); });
 });
 </script>
 
